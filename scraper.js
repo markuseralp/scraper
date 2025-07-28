@@ -3,13 +3,13 @@ require('dotenv').config();
 const { Builder, Browser, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const notifier = require('node-notifier');
-const path = require('path');
 const nodemailer = require("nodemailer");
 
 let currentRecentJob = 'System Integration Engineer （Hardware Verification Engineer /EE）'
-const company = 'Enter Company Name'
 
-const transporter = nodemailer.createTransport({
+const company = 'Enter Company Name' //name to show up on emails and notifications 
+
+const transporter = nodemailer.createTransport({ //optionally change service
     service: 'gmail',
     auth: {
         user: process.env.SENDER,
@@ -19,11 +19,11 @@ const transporter = nodemailer.createTransport({
 
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms)); //function for periodically checking
 }
 
 (async function monitorJobs() {
-  const options = new chrome.Options();
+  const options = new chrome.Options(); //options for decluttering terminal 
   options.addArguments('--headless');
   options.addArguments('--disable-logging');
   options.addArguments('--log-level=3');
@@ -37,28 +37,26 @@ function delay(ms) {
 
   try {
     current = (new Date().getHours())
-    while (current > 8 && current < 17) {
-    // while (current > 8 && current < 23) {
-
+    while (current > 8 && current < 17) { // optionally adjust, currently set to alter betweeen 9am and 5pm
       
-      await driver.get('www.example.com');
+      await driver.get('www.example.com'); //change to workday url
 
       try {
         const element = await driver.wait(
-          until.elementLocated(By.xpath("//h3/a")),
+          until.elementLocated(By.xpath("//h3/a")), //xpath of most recent job element
           6000
         );
     
         const text = await element.getText();
 
         const location = await driver.wait(
-          until.elementLocated(By.xpath("//dl/dd")),
+          until.elementLocated(By.xpath("//dl/dd")), //xpath of job title within most recent job element
           6500
         );
 
         const locText = await location.getText();
        
-        if (text !== currentRecentJob) {
+        if (text !== currentRecentJob) { //checks to see if it matches the previously returned most recent job
           notifier.notify({
             title: company + text ,
             message: locText,
@@ -91,7 +89,7 @@ function delay(ms) {
         console.warn('Element not found or page structure changed.');
       }
 
-      await delay(15 * 60 * 1000);
+      await delay(15 * 60 * 1000); // 15 minute delay
     }
   } catch (err) {
     console.error('Fatal error:', err);
