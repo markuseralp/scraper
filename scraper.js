@@ -5,7 +5,7 @@ const chrome = require('selenium-webdriver/chrome');
 const notifier = require('node-notifier');
 const nodemailer = require("nodemailer");
 
-let currentRecentJob = 'System Integration Engineer （Hardware Verification Engineer /EE）'
+let currentRecentJob = 'Software Engineer）' //** Update exactly to match most recent job to compare changes ** 
 
 const company = 'Enter Company Name' //name to show up on emails and notifications 
 
@@ -39,7 +39,7 @@ function delay(ms) {
     current = (new Date().getHours())
     while (current > 8 && current < 17) { // optionally adjust, currently set to alter betweeen 9am and 5pm
       
-      await driver.get('www.example.com'); //change to workday url
+      await driver.get('www.example.com'); // ** Change to workday url **
 
       try {
         const element = await driver.wait(
